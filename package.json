@@ -1,0 +1,44 @@
+{
+  "name": "faux-image",
+  "private": true,
+  "version": "0.0.0",
+  "description": "a Sails application",
+  "keywords": [],
+  "dependencies": {
+    "@napi-rs/canvas": "^0.1.43",
+    "@sailshq/connect-redis": "^3.2.1",
+    "@sailshq/lodash": "^3.10.3",
+    "@sailshq/socket.io-redis": "^5.2.0",
+    "canvas-constructor": "^7.0.1",
+    "grunt": "1.0.4",
+    "joi": "^17.9.2",
+    "nodemon": "^3.0.1",
+    "sails": "^1.5.4",
+    "sails-hook-grunt": "^5.0.0",
+    "sails-hook-orm": "^4.0.0",
+    "sails-hook-sockets": "^2.0.0"
+  },
+  "devDependencies": {
+    "eslint": "5.16.0"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production node app.js",
+    "test": "npm run lint && npm run custom-tests && echo 'Done.'",
+    "lint": "./node_modules/eslint/bin/eslint.js . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
+    "custom-tests": "echo \"(No other custom tests yet.)\" && echo"
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/santoshkumar/faux-image.git"
+  },
+  "author": "santoshkumar",
+  "license": "ISC",
+  "engines": {
+    "node": "^16.17"
+  },
+  "bugs": {
+    "url": "https://github.com/santoshkumar/faux-image/issues"
+  },
+  "homepage": "https://github.com/santoshkumar/faux-image#readme"
+}

@@ -1,0 +1,97 @@
+<% /*
+
+
+       444444444       000000000            444444444
+      4::::::::4     00:::::::::00         4::::::::4
+     4:::::::::4   00:::::::::::::00      4:::::::::4
+    4::::44::::4  0:::::::000:::::::0    4::::44::::4
+   4::::4 4::::4  0::::::0   0::::::0   4::::4 4::::4
+  4::::4  4::::4  0:::::0     0:::::0  4::::4  4::::4
+ 4::::4   4::::4  0:::::0     0:::::0 4::::4   4::::4
+4::::444444::::4440:::::0 000 0:::::04::::444444::::444
+4::::::::::::::::40:::::0 000 0:::::04::::::::::::::::4
+4444444444:::::4440:::::0     0:::::04444444444:::::444
+          4::::4  0:::::0     0:::::0          4::::4
+          4::::4  0::::::0   0::::::0          4::::4
+          4::::4  0:::::::000:::::::0          4::::4
+        44::::::44 00:::::::::::::00         44::::::44
+        4::::::::4   00:::::::::00           4::::::::4
+        4444444444     000000000             4444444444
+
+
+
+  This is the default "404: Not Found" page (`res.notFound()`)
+  For more information, see:
+  • https://sailsjs.com/docs/reference/response-res/res-not-found
+  • https://sailsjs.com/docs/concepts/extending-sails/custom-responses
+
+*/ %>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>404 Page Not Found</title>
+    <style>
+        /*======================
+            404 page
+        =======================*/
+        .page_404 {
+            padding: 40px 0;
+            background: #fff;
+            font-family: 'Arvo', serif;
+        }
+
+        .page_404 img {
+            width: 100%;
+        }
+
+        .four_zero_four_bg {
+            background-image: url(https://mcusercontent.com/c1afbaede1004bd31b4f241b5/images/36ff1a39-d7fb-1537-bd9b-809527045bfe.gif);
+            height: 400px;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .four_zero_four_bg h1 {
+            font-size: 80px;
+        }
+
+        .four_zero_four_bg h3 {
+            font-size: 80px;
+        }
+
+        .link_404 {
+            color: #fff !important;
+            padding: 10px 20px;
+            background: #39ac31;
+            margin: 20px 0;
+            display: inline-block;
+        }
+
+        .contant_box_404 {
+            text-align: center;
+            font-family: Helvetica;
+        }
+    </style>
+</head>
+<body>
+    <section class="page_404">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 ">
+                    <div class="col-sm-10 col-sm-offset-1 text-center">
+                        <div class="four_zero_four_bg">
+                            <h1 class="text-center"></h1>
+                        </div>
+                        <div class="contant_box_404">
+                            <h2 class="h2">Please check the requested url.</h2>
+                            <h3>The Path is incorrect:- <%= url%></h3>
+                            <!-- <a href="" class="link_404">Go to Home</a> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
