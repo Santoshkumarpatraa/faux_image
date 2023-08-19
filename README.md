@@ -1,4 +1,5 @@
 # faux-image
+Unleash boundless possibilities by generating unique and customizable images through parameter manipulation.
 
 a [Sails v1](https://sailsjs.com) application
 
@@ -10,7 +11,6 @@ a [Sails v1](https://sailsjs.com) application
 + [Deployment tips](https://sailsjs.com/documentation/concepts/deployment)
 + [Community support options](https://sailsjs.com/support)
 + [Professional / enterprise options](https://sailsjs.com/enterprise)
-
 
 ### Version info
 
