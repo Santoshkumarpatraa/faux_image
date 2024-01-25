@@ -1,160 +1,566 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Resistor Color Code Calculator</title>
-    <title>Resistor Color Code Calculator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Transformation</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
         }
 
-        .container {
+        .card {
+            width: 90vw;
+            padding: 3rem !important;
+            background-color: white;
+            box-shadow: 0 12px 15px rgba(0, 0, 0, 0.02);
+            border-radius: 8px;
             text-align: center;
-            margin-top: 50px;
         }
 
-        .calculator {
-            width: 300px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
+        .input-container {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        canvas,
+        img {
+            max-width: 50%;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: black;
+            font-size: 12px;
+            text-align: right;
+            font-family: monospace;
+        }
+
+        .footer a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .frame {
+            width: 90%;
+            margin: 40px auto;
+            text-align: center;
+        }
+
+        .custom-btn {
+            width: 130px;
+            height: 40px;
+            color: #fff;
             border-radius: 5px;
+            padding: 10px 25px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 500;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, .5),
+                7px 7px 20px 0px rgba(0, 0, 0, .1),
+                4px 4px 5px 0px rgba(0, 0, 0, .1);
+            outline: none;
         }
 
-        .result {
-            margin-top: 20px;
-            font-weight: bold;
+        .btn-16 {
+            border: none;
+            color: #000;
+        }
+
+        .btn-16:after {
+            position: absolute;
+            content: "";
+            width: 0;
+            height: 100%;
+            top: 0;
+            left: 0;
+            direction: rtl;
+            z-index: -1;
+            box-shadow:
+                -7px -7px 20px 0px #fff9,
+                -4px -4px 5px 0px #fff9,
+                7px 7px 20px 0px #0002,
+                4px 4px 5px 0px #0001;
+            transition: all 0.3s ease;
+        }
+
+        .btn-16:hover {
+            color: #000;
+        }
+
+        .btn-16:hover:after {
+            left: auto;
+            right: 0;
+            width: 100%;
+        }
+
+        .btn-16:active {
+            top: 2px;
+        }
+
+        .btn-5 {
+            width: 130px;
+            height: 40px;
+            line-height: 42px;
+            padding: 0;
+            border: none;
+            background: rgb(255, 27, 0);
+            background: linear-gradient(0deg, rgba(255, 27, 0, 1) 0%, rgba(251, 75, 2, 1) 100%);
+        }
+
+        .btn-5:hover {
+            color: #f0094a;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .btn-5:before,
+        .btn-5:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 2px;
+            width: 0;
+            background: #f0094a;
+            box-shadow:
+                -1px -1px 5px 0px #fff,
+                7px 7px 20px 0px #0003,
+                4px 4px 5px 0px #0002;
+            transition: 400ms ease all;
+        }
+
+        .btn-5:after {
+            right: inherit;
+            top: inherit;
+            left: 0;
+            bottom: 0;
+        }
+
+        .btn-5:hover:before,
+        .btn-5:hover:after {
+            width: 100%;
+            transition: 800ms ease all;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="calculator">
-            <h1>Resistor Color Code Calculator</h1>
-            <select id="band1">
-                <option value="black">Black</option>
-                <option value="brown">Brown</option>
-                <option value="red">Red</option>
-                <option value="orange">Orange</option>
-                <option value="yellow">Yellow</option>
-                <option value="green">Green</option>
-                <option value="blue">Blue</option>
-                <option value="violet">Violet</option>
-                <option value="gray">Gray</option>
-                <option value="white">White</option>
+    <div class="card">
+        <div class="input-container frame">
+            <form id="imageUrlForm">
+                <label for="imageUrl">Image URL:</label>
+                <input type="text" id="imageUrl" placeholder="Enter image URL">
+                <button type="button" class="custom-btn btn-5" id="loadButton">Load Image</button>
+            </form>
+            <label for="pixelSizeSlider">Pixel Size:</label>
+            <input type="range" id="pixelSizeSlider" min="5" max="100" value="10">
+            <span id="pixelSizeValue">10</span>
+            <label for="shapeSelector">Shape</label>
+            <select id="shapeSelector">
+                <option value="dots">Dots</option>
+                <option value="squares">Squares</option>
+                <option value="triangles">Triangles</option>
+                <option value="circles_with_rings">Circles with Rings</option>
+                <option value="lines">Lines</option>
+                <option value="crosses">Crosses</option>
+                <option value="stars">Star-ish :D</option>
+                <option value="hexagons">Squares (sideways) </option>
+                <option value="pentagons">Pentagons</option>
+                <option value="spiral">Spiral</option>
             </select>
-            <select id="band2">
-                <option value="black">Black</option>
-                <option value="brown">Brown</option>
-                <option value="red">Red</option>
-                <option value="orange">Orange</option>
-                <option value="yellow">Yellow</option>
-                <option value="green">Green</option>
-                <option value="blue">Blue</option>
-                <option value="violet">Violet</option>
-                <option value="gray">Gray</option>
-                <option value="white">White</option>
-            </select>
-            <select id="band3">
-                <option value="black">Black</option>
-                <option value="brown">Brown</option>
-                <option value="red">Red</option>
-                <option value="orange">Orange</option>
-                <option value="yellow">Yellow</option>
-                <option value="green">Green</option>
-                <option value="blue">Blue</option>
-                <option value="violet">Violet</option>
-                <option value="gray">Gray</option>
-                <option value="white">White</option>
-            </select>
-            <select id="band4">
-                <option value="gold">Gold</option>
-                <option value="silver">Silver</option>
-                <option value="none">None</option>
-            </select>
-            <select id="band5">
-                <option value="red">Red</option>
-                <option value="orange">Orange</option>
-                <option value="yellow">Yellow</option>
-                <option value="green">Green</option>
-                <option value="blue">Blue</option>
-                <option value="violet">Violet</option>
-                <option value="gray">Gray</option>
-                <option value="white">White</option>
-                <option value="none">None</option>
-            </select>
-            <select id="band6">
-                <option value="red">Red</option>
-                <option value="orange">Orange</option>
-                <option value="yellow">Yellow</option>
-                <option value="green">Green</option>
-                <option value="blue">Blue</option>
-                <option value="violet">Violet</option>
-                <option value="gray">Gray</option>
-                <option value="white">White</option>
-                <option value="none">None</option>
-            </select>
-            <button id="calculate">Calculate</button>
-            <div class="result" id="result"></div>
+        </div>
+
+        <div style="display: flex;">
+            <canvas id="canvas" width="400" height="400"></canvas>
+            <img id="beforeImage" style="display: none; max-width: 50%;">
+            <canvas id="afterCanvas" width="400" height="400" style="max-width: 50%;"></canvas>
         </div>
     </div>
 
     <script>
-        const calculateButton = document.getElementById('calculate');
-        const resultElement = document.getElementById('result');
+        const imageUrlForm = document.getElementById("imageUrlForm");
+        const imageUrlInput = document.getElementById("imageUrl");
+        const loadButton = document.getElementById("loadButton");
+        const shapeSelector = document.getElementById("shapeSelector");
+        const beforeImage = document.getElementById("beforeImage");
+        const canvas = document.getElementById("canvas");
+        const afterCanvas = document.getElementById("afterCanvas");
+        const ctx = canvas.getContext("2d");
+        const afterCtx = afterCanvas.getContext("2d");
 
-        calculateButton.addEventListener('click', () => {
-            // Get selected color codes
-            const selectedColors = [];
-            for (let i = 1; i <= 6; i++) {
-                const bandColor = document.getElementById(`band${i}`).value;
-                selectedColors.push(bandColor);
+        canvas.willReadFrequently = true;
+        afterCanvas.willReadFrequently = true;
+
+        loadButton.addEventListener("click", loadAndTransformImage);
+        shapeSelector.addEventListener("change", transformImage);
+
+        // Call the loadAndTransformImage function with the default URL
+        loadAndTransformImage();
+
+        function loadAndTransformImage() {
+            const imageUrl =
+                imageUrlInput.value ||
+                "http://localhost:1337/hd1080";
+
+            fetch(imageUrl)
+                .then((response) => response.blob())
+                .then((blob) => {
+                    const img = new Image();
+                    img.onload = function () {
+                        beforeImage.src = img.src;
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+                        transformImage();
+                    };
+                    img.src = URL.createObjectURL(blob);
+                })
+                .catch((error) => {
+                    console.error("Error loading image:", error);
+                });
+        }
+
+        function handleImage(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    const img = new Image();
+                    img.onload = function () {
+                        beforeImage.src = img.src;
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0);
+                        transformImage();
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
             }
+        }
 
-            // Calculate resistor value based on selected colors
-            const resistorValue = calculateResistorValue(selectedColors);
-
-            // Display the calculated value
-            resultElement.textContent = `Resistance: ${resistorValue}`;
+        const pixelSizeSlider = document.getElementById("pixelSizeSlider");
+        const pixelSizeValue = document.getElementById("pixelSizeValue");
+        pixelSizeSlider.addEventListener("input", () => {
+            pixelSizeValue.textContent = pixelSizeSlider.value;
+            afterCtx.clearRect(0, 0, afterCanvas.width, afterCanvas.height);
+            transformImage();
         });
 
-        // Implement your resistor calculation logic here
-        function calculateResistorValue(colors) {
-            // Color code values for bands (multipliers and tolerances)
-            const colorValues = {
-                black: 0,
-                brown: 1,
-                red: 2,
-                orange: 3,
-                yellow: 4,
-                green: 5,
-                blue: 6,
-                violet: 7,
-                gray: 8,
-                white: 9,
-                gold: 0.1,
-                silver: 0.01,
-                none: 0,
-            };
+        function transformImage() {
+            const shape = shapeSelector.value;
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            afterCanvas.width = canvas.width;
+            afterCanvas.height = canvas.height;
+            afterCtx.fillStyle = "rgba(0, 0, 0, 0.9)";
+            afterCtx.fillRect(0, 0, afterCanvas.width, afterCanvas.height);
 
-            // Extract values for bands
-            const firstBand = colorValues[colors[0]];
-            const secondBand = colorValues[colors[1]];
-            const thirdBand = colorValues[colors[2]];
-            const multiplierBand = colorValues[colors[3]];
-            const toleranceBand = colorValues[colors[4]];
-            const sixthBand = colorValues[colors[5]];
+            const pixelSize = parseInt(pixelSizeSlider.value);
+            const shapeFunction = getShapeFunction(shape);
 
-            // Calculate resistance value
-            const resistanceValue = ((firstBand * 10 + secondBand) * Math.pow(10, thirdBand)) + ((sixthBand === 0) ? "" : "e" + sixthBand);
-
-            // Calculate tolerance value
-            const tolerance = (1 + toleranceBand) * 100;
-
-            return `${resistanceValue} ohms ±${tolerance}% tolerance`;
+            for (let y = 0; y < canvas.height; y += pixelSize) {
+                for (let x = 0; x < canvas.width; x += pixelSize) {
+                    const pixelData = getAveragePixel(imageData, x, y, pixelSize);
+                    const brightness = (pixelData[0] + pixelData[1] + pixelData[2]) / 120;
+                    const shapeParams = {
+                        ctx: afterCtx,
+                        x: x,
+                        y: y,
+                        size: pixelSize,
+                        color: `rgba(${pixelData[0]}, ${pixelData[1]}, ${pixelData[2]}, 1)`,
+                        brightness: brightness
+                    };
+                    shapeFunction(shapeParams);
+                }
+            }
         }
+
+        function getAveragePixel(imageData, x, y, pixelSize) {
+            const pixelData = [0, 0, 0];
+            let count = 0;
+
+            for (let offsetY = 0; offsetY < pixelSize; offsetY++) {
+                for (let offsetX = 0; offsetX < pixelSize; offsetX++) {
+                    const dataIndex = ((y + offsetY) * imageData.width + (x + offsetX)) * 4;
+                    pixelData[0] += imageData.data[dataIndex];
+                    pixelData[1] += imageData.data[dataIndex + 1];
+                    pixelData[2] += imageData.data[dataIndex + 2];
+                    count++;
+                }
+            }
+
+            for (let i = 0; i < 3; i++) {
+                pixelData[i] = Math.floor(pixelData[i] / count);
+            }
+
+            return pixelData;
+        }
+
+        function getShapeFunction(shape) {
+            switch (shape) {
+                case "dots":
+                    return drawDot;
+                case "squares":
+                    return drawSquare;
+                case "triangles":
+                    return drawTriangle;
+                case "circles_with_rings":
+                    return drawCircleWithRings;
+                case "lines":
+                    return drawLines;
+                case "crosses":
+                    return drawCrosses;
+                case "stars":
+                    return drawStars;
+                case "hexagons":
+                    return drawHexagons;
+                case "pentagons":
+                    return drawPentagons;
+                case "spiral":
+                    return drawSpiral;
+                case "heart":
+                    return drawHeart;
+                default:
+                    return drawDot;
+            }
+        }
+
+        function drawDot(params) {
+            const radius = ((255 - params.brightness) / 255) * (params.size / 2);
+            params.ctx.fillStyle = params.color;
+            params.ctx.beginPath();
+            params.ctx.arc(params.x + radius, params.y + radius, radius, 0, Math.PI * 2);
+            params.ctx.closePath();
+            params.ctx.fill();
+        }
+
+        function drawSquare(params) {
+            const sideLength = ((255 - params.brightness) / 255) * params.size;
+            const offset = (params.size - sideLength) / 2;
+            params.ctx.fillStyle = params.color;
+            params.ctx.fillRect(
+                params.x + offset,
+                params.y + offset,
+                sideLength,
+                sideLength
+            );
+        }
+
+        function drawTriangle(params) {
+            const sideLength = ((255 - params.brightness) / 255) * params.size;
+            const offset = (params.size - sideLength) / 2;
+            const centerX = params.x + offset + sideLength / 2;
+            const topY = params.y + offset;
+            const bottomY = params.y + offset + sideLength;
+
+            params.ctx.fillStyle = params.color;
+            params.ctx.beginPath();
+            params.ctx.moveTo(centerX, topY);
+            params.ctx.lineTo(params.x + offset, bottomY);
+            params.ctx.lineTo(params.x + offset + sideLength, bottomY);
+            params.ctx.closePath();
+            params.ctx.fill();
+        }
+
+        function drawCircleWithRings(params) {
+            const radius = ((255 - params.brightness) / 255) * (params.size / 3);
+            params.ctx.fillStyle = params.color;
+
+            const ringCount = 4;
+            for (let i = 0; i < ringCount; i++) {
+                const ringRadius = radius * (i + 1);
+                params.ctx.beginPath();
+                params.ctx.arc(
+                    params.x + radius,
+                    params.y + radius,
+                    ringRadius,
+                    0,
+                    Math.PI * 2
+                );
+                params.ctx.closePath();
+                params.ctx.fill();
+            }
+        }
+
+        function drawLines(params) {
+            const step = 5;
+            params.ctx.strokeStyle = params.color;
+            for (let i = 0; i < params.size; i += step) {
+                params.ctx.beginPath();
+                params.ctx.moveTo(params.x + i, params.y);
+                params.ctx.lineTo(params.x, params.y + i);
+                params.ctx.stroke();
+            }
+        }
+
+        function drawCrosses(params) {
+            const step = 5;
+            params.ctx.strokeStyle = params.color;
+            for (let i = 0; i < params.size; i += step) {
+                params.ctx.beginPath();
+                params.ctx.moveTo(params.x + i, params.y - i);
+                params.ctx.lineTo(params.x - i, params.y + i);
+                params.ctx.stroke();
+            }
+        }
+
+        function drawStars(params) {
+            const spikes = 5;
+            const outerRadius = params.size / 2;
+            const innerRadius = outerRadius * 0.5;
+            const rotation = Math.PI / spikes;
+
+            params.ctx.beginPath();
+            params.ctx.moveTo(params.x, params.y - outerRadius);
+            for (let i = 0; i < spikes; i++) {
+                let x = params.x + Math.cos(rotation * i) * outerRadius;
+                let y = params.y + Math.sin(rotation * i) * outerRadius;
+                params.ctx.lineTo(x, y);
+
+                x = params.x + Math.cos(rotation * i + rotation / 2) * innerRadius;
+                y = params.y + Math.sin(rotation * i + rotation / 2) * innerRadius;
+                params.ctx.lineTo(x, y);
+            }
+            params.ctx.lineTo(params.x, params.y - outerRadius);
+            params.ctx.closePath();
+            params.ctx.lineWidth = 2;
+            params.ctx.strokeStyle = params.color;
+            params.ctx.stroke();
+        }
+
+        function drawHexagons(params) {
+            const sideLength = params.size;
+            const centerX = params.x + sideLength / 2;
+            const topY = params.y;
+            const bottomY = params.y + sideLength;
+
+            params.ctx.fillStyle = params.color;
+            params.ctx.beginPath();
+            params.ctx.moveTo(centerX, topY);
+            params.ctx.lineTo(params.x, topY + sideLength / 2);
+            params.ctx.lineTo(params.x, bottomY - sideLength / 2);
+            params.ctx.lineTo(centerX, bottomY);
+            params.ctx.lineTo(params.x + sideLength, bottomY - sideLength / 2);
+            params.ctx.lineTo(params.x + sideLength, topY + sideLength / 2);
+            params.ctx.closePath();
+            params.ctx.fill();
+        }
+
+        function drawPentagons(params) {
+            const sideLength = params.size;
+            const centerX = params.x + sideLength / 2;
+            const topY = params.y;
+            const bottomY = params.y + sideLength;
+            const middleY = params.y + sideLength / 2;
+
+            params.ctx.fillStyle = params.color;
+            params.ctx.beginPath();
+            params.ctx.moveTo(centerX, topY);
+            params.ctx.lineTo(params.x, middleY);
+            params.ctx.lineTo(params.x + sideLength / 3, bottomY);
+            params.ctx.lineTo(params.x + (2 * sideLength) / 3, bottomY);
+            params.ctx.lineTo(params.x + sideLength, middleY);
+            params.ctx.closePath();
+            params.ctx.fill();
+        }
+
+        function drawHeart(params) {
+            const size = params.size;
+            const centerX = params.x + size / 2;
+            const centerY = params.y + size / 2;
+            const xCurve = size / 4;
+            const yCurve = size / 4;
+
+            params.ctx.fillStyle = params.color;
+            params.ctx.beginPath();
+            params.ctx.moveTo(centerX, centerY - size / 4);
+            params.ctx.bezierCurveTo(
+                centerX + xCurve,
+                centerY - yCurve,
+                centerX + xCurve,
+                centerY + yCurve,
+                centerX,
+                centerY + size / 3
+            );
+            params.ctx.bezierCurveTo(
+                centerX - xCurve,
+                centerY + yCurve,
+                centerX - xCurve,
+                centerY - yCurve,
+                centerX,
+                centerY - size / 4
+            );
+            params.ctx.closePath();
+            params.ctx.fill();
+        }
+
+        function drawSpiral(params) {
+            const centerX = params.x + params.size / 2;
+            const centerY = params.y + params.size / 2;
+            const maxRadius = params.size / 2;
+
+            params.ctx.strokeStyle = params.color;
+            params.ctx.beginPath();
+
+            for (let angle = 0; angle < 10 * Math.PI; angle += Math.PI / 30) {
+                const radius = (angle * maxRadius) / (10 * Math.PI);
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                params.ctx.lineTo(x, y);
+            }
+
+            params.ctx.stroke();
+        }
+        function runPreview() {
+            const previewDuration = 1000;
+            const originalShape = shapeSelector.value;
+            const availableShapes = [
+                "dots",
+                "squares",
+                "triangles",
+                "circles_with_rings",
+                "hexagons",
+                "pentagons"
+            ];
+
+            let currentShapeIndex = 0;
+
+            function applyNextShape() {
+                shapeSelector.value = availableShapes[currentShapeIndex];
+                transformImage();
+
+                currentShapeIndex++;
+                if (currentShapeIndex < availableShapes.length) {
+                    setTimeout(applyNextShape, previewDuration);
+                } else {
+                    // Reset shape and color effect after the preview
+                    setTimeout(() => {
+                        shapeSelector.value = originalShape;
+                        transformImage();
+                    }, previewDuration);
+                }
+            }
+
+            applyNextShape();
+        }
+
+        window.onload = function () {
+            runPreview();
+        };
 
     </script>
 </body>
