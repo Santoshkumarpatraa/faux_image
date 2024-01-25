@@ -11,7 +11,7 @@ const Joi = require("joi");
 module.exports = {
   /*** 
    ** Image Generator
-   * API Endpoint :   /image/:dimensions
+   * API Endpoint :   /:dimensions
    * API Method   :   GET
    *
    * @param   {Object}        req          Request Object From API Request.
@@ -168,7 +168,7 @@ module.exports = {
 
   /***
    ** Image Generator
-   * API Endpoint :   /fauxImge
+   * API Endpoint :   /
    * API Method   :   GET
    *
    * @param   {Object}        req          Request Object From API Request.

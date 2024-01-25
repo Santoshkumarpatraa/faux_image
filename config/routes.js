@@ -19,7 +19,7 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': { view: 'pages/homepage' },
+  // '/': { view: 'pages/homepage' },
 
 
   /***************************************************************************
@@ -35,7 +35,7 @@ module.exports.routes = {
 
   
  //FauxImage Controller
- "GET /fauxImage/:dimensions": { controller: "fauxImage/FauxImageController", action: "imageGenerator" },
- "GET /fauxImage": { controller: "fauxImage/FauxImageController", action: "imageWeb"},
+ "GET /:dimensions": { controller: "fauxImage/FauxImageController", action: "imageGenerator" },
+ "GET /": { controller: "fauxImage/FauxImageController", action: "imageWeb"},
 
 };
